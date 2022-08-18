@@ -1,57 +1,24 @@
 class Solution {
 public:
-    vector<vector<int>> threeSum(vector<int>& nums)
-    {
-        vector<vector<int>>res;
-        int n = nums.size();
+    vector<vector<int>> threeSum(vector<int>& nums) {
         sort(nums.begin(),nums.end());
-        // -4 -1 -1 0 1 2
-        // -1 -1 2
-        //-1 
-        // -2 -1  0 1 2 3
-        if(n<2)
+        set<vector<int>> s;
+        vector<vector<int>> ans;
+        for(int i = 0; i < nums.size(); ++i)
         {
-            return res;
-        }
-        for( int i=0;i<n;i++)
-        {
-            if(nums[i]>0)
+            if((i==0 || (i>0 and nums[i]!=nums[i-1])) and nums[i]<=0)//To remove the duplicate value
+            for(int j = i+1; j < nums.size(); ++j)
             {
-                break;
-            }
-            if(i>0 && nums[i]==nums[i-1])
-            {
-                continue;
-            }
-            
-            int l = i+1,r = n-1;
-            while(l<r)
-            {
-                if(nums[i]+(nums[l]+nums[r])==0)
+                if(j!=i+1 and nums[j]==nums[j-1])//To remove the duplicate value
+                    continue;
+                int sum = nums[i]+nums[j];
+                auto it = lower_bound(nums.begin()+(j+1),nums.end(),-sum);//to find element after current element
+                if(it!=nums.end() and nums[i]+nums[j]+*it==0)
                 {
-                    res.push_back(vector<int>{nums[i],nums[l],nums[r]});
-                    while(l<n-1 && nums[l]==nums[l+1])
-                    {
-                        l++;
-                    }
-                    while(r>0 && nums[r]==nums[r-1])
-                    {
-                        r--;
-                    }
-                    l++;
-                    r--;
-                }
-                else if(nums[i] + (nums[l]+nums[r])>0)
-                {
-                    r--;
-                }
-                else
-                {
-                    l++;
+                        ans.push_back({nums[i],nums[j],-sum});
                 }
             }
         }
-        return res;
-        
+        return ans;
     }
 };
