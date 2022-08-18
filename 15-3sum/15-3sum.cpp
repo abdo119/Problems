@@ -1,24 +1,41 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        sort(nums.begin(),nums.end());
-        set<vector<int>> s;
-        vector<vector<int>> ans;
-        for(int i = 0; i < nums.size(); ++i)
-        {
-            if((i==0 || (i>0 and nums[i]!=nums[i-1])) and nums[i]<=0)//To remove the duplicate value
-            for(int j = i+1; j < nums.size(); ++j)
-            {
-                if(j!=i+1 and nums[j]==nums[j-1])//To remove the duplicate value
-                    continue;
-                int sum = nums[i]+nums[j];
-                auto it = lower_bound(nums.begin()+(j+1),nums.end(),-sum);//to find element after current element
-                if(it!=nums.end() and nums[i]+nums[j]+*it==0)
-                {
-                        ans.push_back({nums[i],nums[j],-sum});
+        vector<vector<int>> result;        
+        int n = nums.size();
+        if (n < 3) {
+            return result;
+        }        
+        sort(nums.begin(), nums.end());        
+        for (int i = 0; i < n - 2; i++) {
+            if (nums[i] > 0) {
+                break;
+            }
+            if (i > 0 && nums[i - 1] == nums[i]) {
+                continue;
+            }            
+			//Two sum II
+            int j = i + 1;
+            int k = n - 1;            
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];                
+                if (sum < 0) {
+                    j++;
+                } else if (sum > 0) {
+                    k--;
+                } else {
+                    result.push_back({nums[i], nums[j], nums[k]});                    
+                    while (j < k && nums[j] == nums[j + 1]) {
+                        j++;
+                    }
+                    j++;                   
+                    while (j < k && nums[k - 1] == nums[k]) {
+                        k--;
+                    }
+                    k--;
                 }
             }
         }
-        return ans;
+        return result;
     }
 };
