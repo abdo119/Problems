@@ -1,41 +1,35 @@
 class Solution {
 public:
-    vector<vector<int>> threeSum(vector<int>& nums) {
-        vector<vector<int>> result;        
-        int n = nums.size();
-        if (n < 3) {
-            return result;
-        }        
-        sort(nums.begin(), nums.end());        
-        for (int i = 0; i < n - 2; i++) {
-            if (nums[i] > 0) {
-                break;
-            }
-            if (i > 0 && nums[i - 1] == nums[i]) {
-                continue;
-            }            
-			//Two sum II
-            int j = i + 1;
-            int k = n - 1;            
-            while (j < k) {
-                int sum = nums[i] + nums[j] + nums[k];                
-                if (sum < 0) {
-                    j++;
-                } else if (sum > 0) {
-                    k--;
-                } else {
-                    result.push_back({nums[i], nums[j], nums[k]});                    
-                    while (j < k && nums[j] == nums[j + 1]) {
-                        j++;
-                    }
-                    j++;                   
-                    while (j < k && nums[k - 1] == nums[k]) {
-                        k--;
-                    }
-                    k--;
-                }
+    vector<vector<int> > threeSum(vector<int>& nums) {
+    if(nums.size() <=2) return {};
+    vector<vector<int> > rtn;
+    sort(nums.begin(), nums.end());
+    
+    for(int i =0; i < nums.size();){
+        int start = i+1, end = nums.size()-1;
+
+        while(start < end){
+            if(nums[i]+nums[start]+nums[end] == 0){
+                rtn.push_back({nums[i],nums[start],nums[end]});
+                start++;
+                end--;
+                while((start < end) && nums[start] == nums[start-1]) start++;
+                while((start < end) && nums[end] == nums[end+1]) end--;
+
+            }else if(nums[i]+nums[start]+nums[end]<0){
+                start++;
+                while((start < end) && nums[start] == nums[start-1]) start++;
+            }else{
+                end--;
+                while((start < end) && nums[end] == nums[end+1]) end--;
             }
         }
-        return result;
+        
+        i++;
+        while((i < nums.size()) && nums[i] == nums[i-1])
+            i++;
+        
     }
+    return rtn;
+}
 };
